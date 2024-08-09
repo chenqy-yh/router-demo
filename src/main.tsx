@@ -3,9 +3,14 @@ import {
   createBrowserRouter,
   RouterProvider
 } from 'react-router-dom'
+import Contact from './pages/contact'
 import Root from './routes/root'
 import NotFound from './pages/not-found'
-import Contacts from './pages/contact'
+import Edit from './pages/contact/edit'
+import Test from './pages/test'
+import { loader as contactLoader } from './pages/contact/loader'
+import { loader as rootLoader } from './routes/loader'
+import { action as rootAction } from './routes/action'
 
 // css
 import './index.scss'
@@ -14,11 +19,24 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <Root />,
-    errorElement: <NotFound />
+    errorElement: <NotFound />,
+    loader: rootLoader,
+    action: rootAction,
+    children: [
+      {
+        path: 'contacts/:contactId',
+        element: <Contact />,
+        loader: contactLoader,
+      },
+      {
+        path: 'contacts/:contactId/edit',
+        element: <Edit />,
+      },
+    ]
   },
   {
-    path: '/contacts/:contactId',
-    element: <Contacts />,
+    path: '/test',
+    element: <Test />,
   }
 ])
 

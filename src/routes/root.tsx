@@ -1,4 +1,21 @@
 import styled from 'styled-components';
+import { Outlet, useLoaderData, Form } from 'react-router-dom';
+import { QButton, QLink, QInput } from '../components';
+import { isEmptyArray } from '../utils/common'
+
+type ContactItem = {
+    id: number;
+    name: string;
+    path: string;
+}
+
+type ContactLoaderData = {
+    contacts: ContactItem[];
+}
+
+const MainContainer = styled.div`
+    display: flex;
+`
 
 const Slider = styled.div`
     width: 300px;
@@ -6,29 +23,7 @@ const Slider = styled.div`
     background-color: #eee;
 `
 
-const SearchBar = styled.input`
-    height: 2rem;
-    padding-inline-start: 1rem;
-    border: none;
-    outline: 1px solid #ccc;
-    border-radius: .25rem;
-    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
-    &::placeholder {
-        color:black;
-    }
-    color: black;
-    `
-
-const SearchButton = styled.button`
-    height: 2rem;
-    padding-inline: .5rem;
-    color: #00a8ff;
-    border: none;
-    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;    border-radius: .25rem;
-    background-color: #fff;
-`
-
-const SearchBarWrapper = styled.div`
+const SearchForm = styled(Form)`
     padding-block: 1rem;
     padding-inline: 1.5rem;
     display: flex;
@@ -40,26 +35,39 @@ const Divider = styled.div`
     height: 1px;
     border: 1px solid #ccc;
 `
-const ContactWrapper = styled.div`
+const ContactWrapper = styled.ul`
     padding: 1.5rem;
-
+    
+`
+const ContactItem = styled.li`
+    list-style: none;
 `
 
 
+
 export default function Root() {
+
+    const { contacts } = useLoaderData() as ContactLoaderData;
+
     return (
-        <>
+        <MainContainer>
             <Slider>
-                <SearchBarWrapper>
-                    <SearchBar type="text" placeholder="Search..." />
-                    <SearchButton>New</SearchButton>
-                </SearchBarWrapper>
+                <SearchForm method='post'>
+                    {/* <QInput type="text" placeholder="Search..." /> */}
+                    <QButton type='submit'>New</QButton>
+                </SearchForm>
                 <Divider />
                 <ContactWrapper>
-                    <div>p 1</div>
-                    <div>p 2</div>
+                    {
+                        !isEmptyArray(contacts) ? contacts.map(contact => (
+                            <ContactItem key={contact.id}>
+                                <QLink to={contact.path}>{contact.name}</QLink>
+                            </ContactItem>
+                        )) : <p>No Contacts...</p>
+                    }
                 </ContactWrapper>
             </Slider>
-        </>
+            <Outlet />
+        </MainContainer>
     );
 }
