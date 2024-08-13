@@ -11,6 +11,7 @@ import Test from './pages/test'
 import { loader as contactLoader } from './pages/contact/loader'
 import { loader as rootLoader } from './routes/loader'
 import { action as rootAction } from './routes/action'
+import { action as contactEditAction } from './pages/contact/edit/action'
 
 // css
 import './index.scss'
@@ -31,6 +32,8 @@ const router = createBrowserRouter([
       {
         path: 'contacts/:contactId/edit',
         element: <Edit />,
+        loader: contactLoader,
+        action: contactEditAction,
       },
     ]
   },

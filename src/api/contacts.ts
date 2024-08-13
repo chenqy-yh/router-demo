@@ -15,7 +15,7 @@ export const getContacts = async (query?: string) => {
 export const getContact = async (id: number) => {
   await fakenet(`contact:${id}`);
   const contacts = (await localforage.getItem("contacts")) as ContactItem[];
-  return contacts?.find((contact) => contact.id === 58157739);
+  return contacts?.find((contact) => contact.id === id);
 };
 
 export const createContact = async () => {
@@ -30,6 +30,16 @@ export const createContact = async () => {
   const contacts = (await localforage.getItem("contacts")) as ContactItem[];
   localforage.setItem("contacts", [...(contacts || []), newContact]);
   return newContact;
+};
+
+export const updateContact = async (id: number, updates: ContactItem) => {
+  await fakenet();
+  const contacts = (await localforage.getItem("contacts")) as ContactItem[];
+  const _id = contacts.findIndex((contact) => contact.id === id);
+  if (_id === -1) throw new Error(`Contact not found id:${id}!`);
+  contacts[_id] = { ...contacts[_id], ...updates };
+  localforage.setItem("contacts", contacts);
+  return contacts[_id];
 };
 
 const fakenet = (() => {

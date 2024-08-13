@@ -1,42 +1,39 @@
-import styled, { CSSProperties } from 'styled-components'
-import { Form } from 'react-router-dom'
+import styled from 'styled-components'
+import { Form, Input, Button } from 'antd'
+import { useLoaderData } from 'react-router-dom';
 
-type EditFormItemProps = {
-    label: string;
-    labelWidth?: string;
-    children: React.ReactNode;
-}
-
-const EditForm = styled(Form)``;
-
-const EditFormItemLabel = styled.label<{ style: CSSProperties }>`
-    display: ${props => props.style.display || 'block'};
-    margin-bottom: ${props => props.style.marginBottom || '0.5rem'};
-    font-weight: ${props => props.style.fontWeight || '600'};
-    font-size: ${props => props.style.fontSize || '1rem'};
-    width: ${props => props.style.width || '100%'};
+const RowWrapper = styled.div`
+    display: flex;
+    gap: 1rem;
+    align-items: center;
 `;
 
-
-
-const EditFormItem: React.FC<EditFormItemProps> = (props) => {
-    const { label, children, labelWidth } = props;
-    return (
-        <div>
-            <EditFormItemLabel style={{
-                width: labelWidth
-            }}>{label}</EditFormItemLabel>
-            {children}
-        </div>
-    );
-};
-
 const EditContact: React.FC = () => {
+    const { contact } = useLoaderData() as { contact: ContactItem };
     return (
-        <EditForm>
-            <EditFormItem label='Name' labelWidth='100px'>123
-            </EditFormItem>
-        </EditForm>
+        <Form labelCol={{ span: 8 }} labelAlign='left'>
+            <Form.Item label='Name' >
+                <RowWrapper>
+                    <Input placeholder='First' defaultValue={contact.first || ''} />
+                    <Input placeholder='Last' defa/>
+                </RowWrapper>
+            </Form.Item>
+            <Form.Item label='Twitter'>
+                <Input placeholder='@jack' />
+            </Form.Item>
+            <Form.Item label='Avatar URL'>
+                <Input placeholder='https://example.com/avatar.jpg' />
+            </Form.Item>
+            <Form.Item label='Notes'>
+                <Input.TextArea />
+            </Form.Item>
+            <Form.Item label=' ' colon={false}>
+                <RowWrapper>
+                    <Button type='primary'>Save</Button>
+                    <Button type='default'>Cancel</Button>
+                </RowWrapper>
+            </Form.Item>
+        </Form>
     );
 }
 

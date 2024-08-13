@@ -40,7 +40,6 @@ const Handle = styled.p`
 
 const Contact = () => {
   const { contact } = useLoaderData() as LoaderData;
-
   return (
     <ContactsWrapper>
       <Avatar src='/avatar.jpg' />
